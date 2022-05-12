@@ -5,7 +5,80 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Z-Weather</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <script src="main.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <div class="weather-info-container">
+      <div class="weather-info-description">Light Rain</div>
+      <div class="weather-info-city">Sydney</div>
+      <div class="weather-info-date">Thursday, 12th May '22</div>
+      <div class="weather-info-time">6:45 pm</div>
+      <div class="weather-info-temperature">19 &deg;C</div>
+      <button class="weather-info-units">Display &deg;F</button>
+      <div class="weather-info-icon">
+        <i class="material-icons">water_drop</i>
+      </div>
+      <form action="" class="form-1">
+        <input
+          type="text"
+          name="search"
+          id="searchbar"
+          class="searchbar"
+          placeholder="Search City..."
+        />
+        <button type="submit" class="searchbar-button">
+          <i class="material-icons">search</i>
+        </button>
+      </form>
+      <div class="weather-info-loading" style="visibility: hidden">
+        Fetching weather data...
+      </div>
+    </div>
+
+    <div class="weather-details-container">
+      <div class="weather-details">
+        <div class="weather-details-icon">
+          <i class="material-icons">thermostat</i>
+        </div>
+        <div class="weather-details-info">
+          <div class="weather-details-label">Feels Like</div>
+          <div class="weather-details-data">20 &deg;C</div>
+        </div>
+      </div>
+
+      <div class="weather-details">
+        <div class="weather-details-icon">
+          <i class="material-icons">water_drop</i>
+        </div>
+        <div class="weather-details-info">
+          <div class="weather-details-label">Humidity</div>
+          <div class="weather-details-data">98 %</div>
+        </div>
+      </div>
+
+      <div class="weather-details">
+        <div class="weather-details-icon">
+          <i class="material-icons">air</i>
+        </div>
+        <div class="weather-details-info">
+          <div class="weather-details-label">Wind Speed</div>
+          <div class="weather-details-data">11.3 km/h</div>
+        </div>
+      </div>
+
+      <div class="weather-details">
+        <div class="weather-details-icon">
+          <i class="material-icons">tire_repair</i>
+        </div>
+        <div class="weather-details-info">
+          <div class="weather-details-label">Pressure</div>
+          <div class="weather-details-data">1011 hPa</div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
