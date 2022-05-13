@@ -1,8 +1,31 @@
+:root {
+  --underlay-color: rgba(21, 0, 54, 0.534);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
 body {
   background-image: url("./background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  background-position-x: center;
+  height: 100%;
+  width: 100%;
+}
+
+.underlay {
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 64px;
+  background-color: var(--underlay-color);
 }
