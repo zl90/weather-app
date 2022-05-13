@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import "./style.css";
-import { format, add } from "date-fns";
+import { format, add, isAfter } from "date-fns";
 import BackgroundImage from "./background.jpg";
 import Favicon from "./favicon-32x32.png";
 import Icons from "./icons";
@@ -51,7 +51,7 @@ const dateDisplay = document.querySelector(".weather-info-date");
 const timeDisplay = document.querySelector(".weather-info-time");
 const temperatureDisplay = document.querySelector(".weather-info-temperature");
 const unitsButton = document.querySelector(".weather-info-units");
-const weatherIcon = document.querySelector(".weather-info-icon>i");
+const weatherIcon = document.querySelector(".weather-info-icon");
 
 // State
 const units = "metric";
@@ -74,24 +74,85 @@ const WeatherToday = ((
   humidity = 0,
   windSpeed = 0,
   pressure = 0,
-  timezone = 0
+  timezone = 0,
+  icon = ""
 ) => {
   const setProperties = (data) => {
     WeatherToday.city = data.name;
     WeatherToday.country = data.sys.country;
-    WeatherToday.temperature = data.main.temp.toFixed(1);
-    WeatherToday.feelslike = data.main.feels_like.toFixed(1);
+    WeatherToday.temperature = data.main.temp.toFixed(0);
+    WeatherToday.feelslike = data.main.feels_like.toFixed(0);
     WeatherToday.description = data.weather[0].description;
     WeatherToday.main = data.weather[0].main;
     WeatherToday.humidity = data.main.humidity;
     WeatherToday.pressure = data.main.pressure; // note: pressure is in hPa
-    WeatherToday.timezone = data.timezone;
+
+    // The local time is returned as an integer representing the shift
+    // in seconds from UTC time. So I'll need to get the current time
+    // in UTC, then add the amount of seconds to it.
+    const dateInUTC = new Date().toUTCString();
+    const dateInLocal = add(Date.parse(dateInUTC), {
+      // API seems to be returning incorrect timezone data
+      // (it added an extra 10 hours)
+      seconds: data.timezone - 36000,
+    });
+    WeatherToday.timezone = dateInLocal;
+    console.log(dateInLocal);
+
     if (units === "metric") {
       // Convert Meters/second to Kilometers/hour
       WeatherToday.windSpeed = (data.wind.speed * 3.6).toFixed(1);
     } else if (units === "imperial") {
       // Imperial units already show Miles/hour
       WeatherToday.windSpeed = data.wind.speed.toFixed(1);
+    }
+
+    WeatherToday.selectIcon(data);
+  };
+
+  const selectIcon = (data) => {
+    const weatherID = data.weather[0].id;
+    if (weatherID >= 802) {
+      // cloudy
+      WeatherToday.icon = Icons.cloud;
+    } else if (weatherID === 801) {
+      // partially cloudy
+      if (
+        new Date(Date.parse(WeatherToday.timezone)).getHours() >= 18 ||
+        new Date(Date.parse(WeatherToday.timezone)).getHours() < 6
+      ) {
+        // Night time, set the icon to a moon
+        WeatherToday.icon = Icons.cloudyNight;
+      } else {
+        // Day time, set the icon to a sun
+        WeatherToday.icon = Icons.cloudyDay;
+      }
+    } else if (weatherID === 800) {
+      // clear weather
+      if (
+        new Date(Date.parse(WeatherToday.timezone)).getHours() >= 18 ||
+        new Date(Date.parse(WeatherToday.timezone)).getHours() < 6
+      ) {
+        // Night time, set the icon to a moon
+        WeatherToday.icon = Icons.moon;
+        console.log(new Date(Date.parse(WeatherToday.timezone)).getHours());
+      } else {
+        // Day time, set the icon to a sun
+        WeatherToday.icon = Icons.sun;
+        console.log(new Date(Date.parse(WeatherToday.timezone)).getHours());
+      }
+    } else if (weatherID >= 701 && weatherID <= 781) {
+      // Atmospheric effects
+      WeatherToday.icon = Icons.haze;
+    } else if (weatherID >= 600 && weatherID <= 622) {
+      // Snow
+      WeatherToday.icon = Icons.snow;
+    } else if (weatherID >= 300 && weatherID <= 531) {
+      // Rain
+      WeatherToday.icon = Icons.raincloud;
+    } else if (weatherID >= 200 && weatherID <= 232) {
+      // Storm
+      WeatherToday.icon = Icons.storm;
     }
   };
 
@@ -106,7 +167,9 @@ const WeatherToday = ((
     windSpeed,
     pressure,
     timezone,
+    icon,
     setProperties,
+    selectIcon,
   };
 })();
 
@@ -128,20 +191,13 @@ const DisplayController = (() => {
       unitsButton.textContent = "Display °C";
     }
 
-    // The local time is returned as an integer representing the shift
-    // in seconds from UTC time. So I'll need to get the current time
-    // in UTC, then add the amount of seconds to it.
-    const dateInUTC = new Date().toUTCString();
-    const dateInLocal = add(Date.parse(dateInUTC), {
-      // API seems to be returning incorrect timezone data
-      // (it added an extra 10 hours)
-      seconds: WeatherToday.timezone - 36000,
-    });
-    dateDisplay.textContent = format(dateInLocal, "PPPP");
-    timeDisplay.textContent = format(dateInLocal, "p");
+    dateDisplay.textContent = format(WeatherToday.timezone, "PPPP");
+    timeDisplay.textContent = format(WeatherToday.timezone, "p");
 
     humidityDisplay.textContent = `${WeatherToday.humidity} %`;
     pressureDisplay.textContent = `${WeatherToday.pressure} hPa`;
+
+    weatherIcon.innerHTML = WeatherToday.icon;
   };
 
   return { displayAllData };
@@ -193,9 +249,9 @@ const getTodaysWeatherData = async (cityName) => {
   }
 };
 
-const submitForm = (event) => {
+const submitForm = async (event) => {
   event.preventDefault();
-  getTodaysWeatherData(searchbar.value);
+  await getTodaysWeatherData(searchbar.value);
   console.log(WeatherToday);
 };
 

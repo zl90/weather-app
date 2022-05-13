@@ -32,3 +32,5 @@ const Icons = (() => {
     storm,
   };
 })();
+
+export default Icons;
