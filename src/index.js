@@ -18,18 +18,22 @@ import Icons from "./icons";
 
 [X] Set up a simple form that will let users input their location and will fetch the weather info (still just console.log() it).
 
-[~] Display the information on your webpage!
-    [ ] Get icons working.
+[X] Display the information on your webpage!
+    [X] Get icons working.
 
 [ ] Add any styling you like!
 
-[ ] Optional: add a ‘loading’ component that displays from the time the form is submitted until the information comes back from the API.
+[X] Optional: don't display anything until all data on the page is loaded.
+
+[X] Optional: add a ‘loading’ component that displays from the time the form is submitted until the information comes back from the API.
     
 [ ] Push that baby to github and share your solution below!
 
 */
 
 // DOM nodes
+const body = document.querySelector("body");
+const underlay = document.querySelector(".underlay");
 const form1 = document.querySelector(".form-1");
 const searchbar = document.querySelector(".searchbar");
 const searchbarButton = document.querySelector(".searchbar-button");
@@ -52,6 +56,7 @@ const timeDisplay = document.querySelector(".weather-info-time");
 const temperatureDisplay = document.querySelector(".weather-info-temperature");
 const unitsButton = document.querySelector(".weather-info-units");
 const weatherIcon = document.querySelector(".weather-info-icon");
+const loadingText = document.querySelector(".weather-info-loading");
 
 // State
 const units = "metric";
@@ -175,6 +180,29 @@ const WeatherToday = ((
 
 // Displaying information on the DOM
 const DisplayController = (() => {
+  const showLoadingText = () => {
+    if (underlay.style.visibility !== "hidden") {
+      loadingText.style.visibility = "visible";
+    }
+  };
+
+  const hideLoadingText = () => {
+    loadingText.style.visibility = "hidden";
+  };
+
+  const loadBackgroundImage = () => {
+    // Load background image asynchronously and only show a loading
+    // GIF while the background image is downloading.
+    const downloadingImage = new Image();
+    downloadingImage.onload = function () {
+      body.style.backgroundImage = `url(${this.src})`;
+      body.style.backgroundSize = "cover";
+      underlay.style.visibility = "visible";
+    };
+    downloadingImage.src = BackgroundImage;
+    underlay.style.visibility = "hidden";
+  };
+
   const displayAllData = () => {
     descriptionDisplay.textContent = capitalize(WeatherToday.description);
     cityDisplay.textContent = `${WeatherToday.city}, ${WeatherToday.country}`;
@@ -198,9 +226,16 @@ const DisplayController = (() => {
     pressureDisplay.textContent = `${WeatherToday.pressure} hPa`;
 
     weatherIcon.innerHTML = WeatherToday.icon;
+
+    hideLoadingText();
   };
 
-  return { displayAllData };
+  return {
+    displayAllData,
+    hideLoadingText,
+    showLoadingText,
+    loadBackgroundImage,
+  };
 })();
 
 const setFavicons = (favImg) => {
@@ -221,6 +256,7 @@ const formatCityName = (cityName) => cityName.replaceAll(" ", "+");
 // Makes a request to the Open Weather API for today's weather info.
 const getTodaysWeatherData = async (cityName) => {
   try {
+    DisplayController.showLoadingText();
     const formattedCityName = formatCityName(cityName);
     const url = buildURL(formattedCityName);
 
@@ -236,6 +272,7 @@ const getTodaysWeatherData = async (cityName) => {
     }
   } catch (error) {
     console.log(error);
+    DisplayController.hideLoadingText();
     if (error.status === 404) {
       // Use Constraint Validation API here. Let the user know
       // that their city cannot be found.
@@ -255,14 +292,15 @@ const submitForm = async (event) => {
   console.log(WeatherToday);
 };
 
-const clearSearchbar = () => {
+const clearSearchbarValidity = () => {
   searchbar.setCustomValidity("");
 };
 
 // Events
 form1.addEventListener("submit", submitForm);
-searchbar.addEventListener("input", clearSearchbar);
+searchbar.addEventListener("input", clearSearchbarValidity);
 
+DisplayController.loadBackgroundImage();
 setFavicons(Favicon);
 getTodaysWeatherData(defaultCity);
 console.log(WeatherToday);

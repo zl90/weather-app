@@ -6,6 +6,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: "montserrat", sans-serif;
 }
 
 html {
@@ -13,10 +14,12 @@ html {
 }
 
 body {
-  background-image: url("./background.jpg");
+  background-image: url("./loading.gif");
   background-repeat: no-repeat;
-  background-size: cover;
+  /* background-size: cover; */
   background-position-x: center;
+  background-position-y: center;
+  background-color: rgb(165, 144, 204);
   height: 100%;
   width: 100%;
 }
@@ -28,4 +31,25 @@ body {
   justify-content: space-between;
   padding: 64px;
   background-color: var(--underlay-color);
+  color: aliceblue;
+}
+
+.searchbar-button {
+  color: aliceblue;
+  background-color: rgba(240, 248, 255, 0);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.form-1 {
+  display: flex;
+  justify-content: center;
+}
+
+.weather-info-icon {
+  width: 100px;
+  height: 100px;
 }
