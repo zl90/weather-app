@@ -5,6 +5,7 @@ import "./style.css";
 import { format, add } from "date-fns";
 import BackgroundImage from "./background.jpg";
 import Favicon from "./favicon-32x32.png";
+import Icons from "./icons";
 
 /*
 -*''^`^''*-..,_,..-*''^`^''*-..,_,..-*''^`^''*-..,_,..-*''^`^''*-
@@ -54,6 +55,7 @@ const weatherIcon = document.querySelector(".weather-info-icon>i");
 
 // State
 const units = "metric";
+const defaultCity = "Sydney";
 
 const capitalize = (str) => {
   const result = str.charAt(0).toUpperCase() + str.slice(1, str.length);
@@ -206,5 +208,5 @@ form1.addEventListener("submit", submitForm);
 searchbar.addEventListener("input", clearSearchbar);
 
 setFavicons(Favicon);
-getTodaysWeatherData("Albion Park Rail");
+getTodaysWeatherData(defaultCity);
 console.log(WeatherToday);
