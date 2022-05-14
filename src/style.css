@@ -165,3 +165,27 @@ body {
   font-size: 1.5rem;
   font-weight: 600;
 }
+
+@media screen and (max-width: 750px) {
+  .underlay {
+    padding: 48px 32px;
+  }
+
+  .weather-info-description {
+    font-size: 1.7rem;
+  }
+
+  .form-1,
+  .searchbar {
+    width: 75%;
+  }
+
+  .weather-details-data {
+    font-size: 1rem;
+  }
+
+  .weather-details-container {
+    padding-top: 0;
+    gap: 64px;
+  }
+}
