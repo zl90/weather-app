@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;500;600;700&display=swap");
+
 :root {
   --underlay-color: rgba(21, 0, 54, 0.534);
 }
@@ -6,7 +8,8 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "montserrat", sans-serif;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
 }
 
 html {
@@ -29,9 +32,83 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 64px;
+  padding: 74px;
   background-color: var(--underlay-color);
   color: aliceblue;
+}
+
+.weather-info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-info-description {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.weather-info-city {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.weather-info-date,
+.weather-info-time {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.weather-info-time {
+  margin-bottom: 16px;
+}
+
+.weather-info-temperature {
+  font-size: 3.8rem;
+  font-weight: 700;
+}
+
+.weather-info-units {
+  color: aliceblue;
+  background: none;
+  border: 2px solid aliceblue;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100px;
+  margin-bottom: 24px;
+}
+
+.weather-info-icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.form-1 {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid aliceblue;
+  margin-bottom: 12px;
+}
+
+.searchbar {
+  background: none;
+  border: none;
+  color: aliceblue;
+  font-weight: 600;
+  caret-color: aliceblue;
+  padding-left: 4px;
+  padding-bottom: 4px;
+}
+
+.searchbar::placeholder {
+  color: rgba(240, 248, 255, 0.651);
+  font-weight: 600;
+}
+
+.searchbar:focus-visible {
+  outline: none;
 }
 
 .searchbar-button {
@@ -44,12 +121,47 @@ body {
   cursor: pointer;
 }
 
-.form-1 {
+.weather-details-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: 8px;
 }
 
-.weather-info-icon {
-  width: 100px;
-  height: 100px;
+.weather-details-icon {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.weather-details-icon > * {
+  font-size: 40px;
+}
+
+.weather-info-loading {
+  font-size: 0.75rem;
+}
+
+.weather-details {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.weather-details-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weather-details-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.weather-details-data {
+  font-size: 1.5rem;
+  font-weight: 600;
 }

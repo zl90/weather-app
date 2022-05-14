@@ -207,7 +207,7 @@ const DisplayController = (() => {
 
   const displayAllData = () => {
     descriptionDisplay.textContent = capitalize(WeatherToday.description);
-    cityDisplay.textContent = `${WeatherToday.city}, ${WeatherToday.country}`;
+    cityDisplay.textContent = `${WeatherToday.city} ${WeatherToday.country}`;
 
     if (units === "metric") {
       temperatureDisplay.textContent = `${WeatherToday.temperature} °C`;
@@ -222,7 +222,7 @@ const DisplayController = (() => {
     }
 
     dateDisplay.textContent = format(WeatherToday.timezone, "PPPP");
-    timeDisplay.textContent = format(WeatherToday.timezone, "p");
+    timeDisplay.textContent = format(WeatherToday.timezone, "p").toLowerCase();
 
     humidityDisplay.textContent = `${WeatherToday.humidity} %`;
     pressureDisplay.textContent = `${WeatherToday.pressure} hPa`;
@@ -240,11 +240,13 @@ const DisplayController = (() => {
       units = "metric";
       unitsButton.textContent = "Display °F";
     }
-    if (searchbar.value) {
-      getTodaysWeatherData(searchbar.value);
-    } else {
-      getTodaysWeatherData(defaultCity);
-    }
+    // if (searchbar.value) {
+    //   getTodaysWeatherData(searchbar.value);
+    // } else {
+    //   getTodaysWeatherData(defaultCity);
+    // }
+
+    getTodaysWeatherData(WeatherToday.city);
   };
 
   return {
@@ -306,7 +308,8 @@ const getTodaysWeatherData = async (cityName) => {
 
 const submitForm = async (event) => {
   event.preventDefault();
-  await getTodaysWeatherData(searchbar.value);
+  getTodaysWeatherData(searchbar.value);
+  searchbar.value = "";
   console.log(WeatherToday);
 };
 
