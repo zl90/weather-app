@@ -1,8 +1,9 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import "./style.css";
-import { format, add, isAfter } from "date-fns";
+import { format, add } from "date-fns";
 import BackgroundImage from "./background.jpg";
 import Favicon from "./favicon-32x32.png";
 import Icons from "./icons";
@@ -21,6 +22,8 @@ import Icons from "./icons";
 [X] Display the information on your webpage!
     [X] Get icons working.
 
+[X] Add a button to switch between °C and °F.
+
 [ ] Add any styling you like!
 
 [X] Optional: don't display anything until all data on the page is loaded.
@@ -36,7 +39,6 @@ const body = document.querySelector("body");
 const underlay = document.querySelector(".underlay");
 const form1 = document.querySelector(".form-1");
 const searchbar = document.querySelector(".searchbar");
-const searchbarButton = document.querySelector(".searchbar-button");
 const feelsLikeDisplay = document.querySelector(
   ".weather-details:nth-child(1) .weather-details-data"
 );
@@ -59,7 +61,7 @@ const weatherIcon = document.querySelector(".weather-info-icon");
 const loadingText = document.querySelector(".weather-info-loading");
 
 // State
-const units = "metric";
+let units = "metric";
 const defaultCity = "Sydney";
 
 const capitalize = (str) => {
@@ -230,11 +232,27 @@ const DisplayController = (() => {
     hideLoadingText();
   };
 
+  const toggleUnits = () => {
+    if (units === "metric") {
+      units = "imperial";
+      unitsButton.textContent = "Display °C";
+    } else {
+      units = "metric";
+      unitsButton.textContent = "Display °F";
+    }
+    if (searchbar.value) {
+      getTodaysWeatherData(searchbar.value);
+    } else {
+      getTodaysWeatherData(defaultCity);
+    }
+  };
+
   return {
     displayAllData,
     hideLoadingText,
     showLoadingText,
     loadBackgroundImage,
+    toggleUnits,
   };
 })();
 
@@ -299,6 +317,7 @@ const clearSearchbarValidity = () => {
 // Events
 form1.addEventListener("submit", submitForm);
 searchbar.addEventListener("input", clearSearchbarValidity);
+unitsButton.addEventListener("click", DisplayController.toggleUnits);
 
 DisplayController.loadBackgroundImage();
 setFavicons(Favicon);
