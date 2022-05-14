@@ -8,32 +8,6 @@ import BackgroundImage from "./background.jpg";
 import Favicon from "./favicon-32x32.png";
 import Icons from "./icons";
 
-/*
--*''^`^''*-..,_,..-*''^`^''*-..,_,..-*''^`^''*-..,_,..-*''^`^''*-
-
-[X] Set up a blank HTML document with the appropriate links to your JavaScript and CSS files.
-
-[X] Write the functions that hit the API. You’re going to want functions that can take a location and return the weather data for that location. For now, just console.log() the information.
-
-[X] Write the functions that process the JSON data you’re getting from the API and return an object with only the data you require for your app.
-
-[X] Set up a simple form that will let users input their location and will fetch the weather info (still just console.log() it).
-
-[X] Display the information on your webpage!
-    [X] Get icons working.
-
-[X] Add a button to switch between °C and °F.
-
-[ ] Add any styling you like!
-
-[X] Optional: don't display anything until all data on the page is loaded.
-
-[X] Optional: add a ‘loading’ component that displays from the time the form is submitted until the information comes back from the API.
-    
-[ ] Push that baby to github and share your solution below!
-
-*/
-
 // DOM nodes
 const body = document.querySelector("body");
 const underlay = document.querySelector(".underlay");
@@ -268,7 +242,7 @@ const setFavicons = (favImg) => {
 
 // Injects variables into the API request.
 const buildURL = (cityName) =>
-  `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=${units}&APPID=94bcd9b6ca50aef9b00d3ba7c664ea47`;
+  `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=${units}&APPID=94bcd9b6ca50aef9b00d3ba7c664ea47`;
 
 // Replaces whitespace with "+" to conform to the API standard.
 const formatCityName = (cityName) => cityName.replaceAll(" ", "+");
